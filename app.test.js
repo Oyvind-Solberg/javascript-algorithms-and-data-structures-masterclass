@@ -105,7 +105,7 @@ describe('SinglyLinkedList', () => {
 	describe('shift()', () => {
 		test('should return undefined on an empty list', () => {
 			expect(list.shift()).toBe(undefined);
-			gf;
+			hj;
 		});
 	});
 });
