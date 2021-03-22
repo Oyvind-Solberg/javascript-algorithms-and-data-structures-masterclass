@@ -1,8 +1,8 @@
 /**
- * Stack
+ * Queue
  *
  * Description:
- * A LIFO data structure. (Last Inn, First Out)
+ * A FIFO data structure (First In, First Out)
  *
  * Pros:
  * - Fast insertion and removal
@@ -11,10 +11,11 @@
  *
  *
  * Usecase:
- * - Manage function invocations
- * - Undo / Redo
- * - Routing (the history object) - Browser history
+ * - Task processing
+ * - Printing
+ * - Uploading resources
  * - Foundational for more complex data structures
+ *
  *
  * Big O:
  * Insertion:  O(1)
@@ -31,27 +32,28 @@ class Node {
 	}
 }
 
-class Stack {
+class Queue {
 	constructor() {
 		this.first = null;
 		this.last = null;
 		this.size = 0;
 	}
-	push(value) {
+	enqueue(value) {
 		const newNode = new Node(value);
 
 		if (!this.first) {
 			this.first = newNode;
 			this.last = newNode;
 		} else {
-			newNode.next = this.first;
-			this.first = newNode;
+			this.last.next = newNode;
+			this.last = newNode;
 		}
 
 		this.size++;
+
 		return this.size;
 	}
-	pop() {
+	dequeue() {
 		if (!this.first) return null;
 
 		let oldFirst = this.first;
@@ -68,4 +70,4 @@ class Stack {
 	}
 }
 
-exports.Stack = Stack;
+exports.Queue = Queue;
