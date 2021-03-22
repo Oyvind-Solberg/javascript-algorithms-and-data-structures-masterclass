@@ -1,13 +1,13 @@
-const { DoublyLinkedList } = require('./DoublyLinkedList');
+const { SinglyLinkedList } = require('../../data-structures/SinglyLinkedList');
 
-describe('DoublyLinkedList', () => {
+describe('SinglyLinkedList', () => {
 	let list;
 	let listOfThreeItems;
 
 	beforeEach(() => {
-		list = new DoublyLinkedList();
+		list = new SinglyLinkedList();
 
-		listOfThreeItems = new DoublyLinkedList();
+		listOfThreeItems = new SinglyLinkedList();
 		listOfThreeItems.push(10);
 		listOfThreeItems.push(20);
 		listOfThreeItems.push(30);
@@ -20,21 +20,6 @@ describe('DoublyLinkedList', () => {
 
 			expect(list.head.val).toBe(10);
 			expect(list.tail.val).toBe(10);
-		});
-
-		test(`should set the correct next and prev pointers on all the nodes in the list`, () => {
-			const firstNode = listOfThreeItems.head;
-			const secondNode = listOfThreeItems.head.next;
-			const thirdNode = listOfThreeItems.head.next.next;
-
-			expect(firstNode.val).toBe(10);
-			expect(secondNode.val).toBe(20);
-			expect(thirdNode.val).toBe(30);
-			expect(thirdNode.next).toBe(null);
-
-			expect(thirdNode.prev).toBe(secondNode);
-			expect(secondNode.prev).toBe(firstNode);
-			expect(firstNode.prev).toBe(null);
 		});
 
 		test(`should increment the length by 1`, () => {
@@ -52,16 +37,36 @@ describe('DoublyLinkedList', () => {
 		test(`should return the list`, () => {
 			expect(list.push(10)).toBe(list);
 		});
+
+		test(`should keep head as the first node in the list`, () => {
+			expect(listOfThreeItems.head.val).toBe(10);
+		});
+
+		test(`should keep tail as the last node in the list`, () => {
+			expect(listOfThreeItems.tail.val).toBe(30);
+		});
+
+		test(`should keep items in the list in the right order`, () => {
+			list.push(10);
+			list.push(20);
+			list.push(30);
+			list.push(40);
+			list.push(50);
+
+			expect(list.head.next.val).toBe(20);
+			expect(list.head.next.next.next.val).toBe(40);
+		});
 	});
+
 	// POP
 	describe('pop()', () => {
 		test('should return undefined on empty list ', () => {
 			expect(list.pop()).toBe(undefined);
 		});
 
-		test('should return poped node', () => {
+		test('should return poped node value', () => {
 			const lastNode = listOfThreeItems.tail;
-			expect(listOfThreeItems.pop()).toBe(lastNode);
+			expect(listOfThreeItems.pop()).toBe(lastNode.val);
 		});
 
 		test('should remove the last item in the list', () => {
@@ -102,9 +107,9 @@ describe('DoublyLinkedList', () => {
 			expect(list.shift()).toBe(undefined);
 		});
 
-		test('should return the the removed node', () => {
+		test('should return the removed node value', () => {
 			const firstNode = listOfThreeItems.head;
-			expect(listOfThreeItems.shift()).toBe(firstNode);
+			expect(listOfThreeItems.shift()).toBe(firstNode.val);
 		});
 
 		test('should remove the first node in the list', () => {
@@ -112,20 +117,6 @@ describe('DoublyLinkedList', () => {
 			listOfThreeItems.shift();
 
 			expect(listOfThreeItems.head).toBe(secondNode);
-		});
-
-		test('should set head.prev to null on the first node in the list', () => {
-			listOfThreeItems.shift();
-
-			expect(listOfThreeItems.head.prev).toBe(null);
-		});
-
-		test('should remove all node pointers on the removed node', () => {
-			const removedNode = listOfThreeItems.head;
-			listOfThreeItems.shift();
-
-			expect(removedNode.prev).toBe(null);
-			expect(removedNode.next).toBe(null);
 		});
 
 		test('should set head and tail to null on a list with one item', () => {
@@ -179,33 +170,19 @@ describe('DoublyLinkedList', () => {
 			expect(list.unshift(10)).toBe(list);
 		});
 
-		test(`should keep next pointers in the right order`, () => {
+		test(`should keep items in the list in the right order`, () => {
+			list.unshift(50);
 			list.unshift(40);
 			list.unshift(30);
 			list.unshift(20);
 			list.unshift(10);
 
-			expect(list.head.val).toBe(10);
 			expect(list.head.next.val).toBe(20);
-			expect(list.head.next.next.val).toBe(30);
 			expect(list.head.next.next.next.val).toBe(40);
-			expect(list.head.next.next.next.next).toBe(null);
-		});
-
-		test(`should keep prev pointers in the right order`, () => {
-			list.unshift(40);
-			list.unshift(30);
-			list.unshift(20);
-			list.unshift(10);
-
-			expect(list.tail.val).toBe(40);
-			expect(list.tail.prev.val).toBe(30);
-			expect(list.tail.prev.prev.val).toBe(20);
-			expect(list.tail.prev.prev.prev.val).toBe(10);
-			expect(list.tail.prev.prev.prev.prev).toBe(null);
 		});
 	});
 
+	// GET
 	describe('get()', () => {
 		test(`should return the node corresponding to its index`, () => {
 			const firstNode = listOfThreeItems.head;
@@ -286,26 +263,6 @@ describe('DoublyLinkedList', () => {
 
 			expect(list.length).toBe(3);
 		});
-
-		test(`should keep next pointers in the right order`, () => {
-			listOfThreeItems.insert(1, 'a');
-
-			expect(listOfThreeItems.head.val).toBe(10);
-			expect(listOfThreeItems.head.next.val).toBe('a');
-			expect(listOfThreeItems.head.next.next.val).toBe(20);
-			expect(listOfThreeItems.head.next.next.next.val).toBe(30);
-			expect(listOfThreeItems.head.next.next.next.next).toBe(null);
-		});
-
-		test(`should keep prev pointers in the right order`, () => {
-			listOfThreeItems.insert(1, 'a');
-
-			expect(listOfThreeItems.tail.val).toBe(30);
-			expect(listOfThreeItems.tail.prev.val).toBe(20);
-			expect(listOfThreeItems.tail.prev.prev.val).toBe('a');
-			expect(listOfThreeItems.tail.prev.prev.prev.val).toBe(10);
-			expect(listOfThreeItems.tail.prev.prev.prev.prev).toBe(null);
-		});
 	});
 
 	// REMOVE
@@ -333,11 +290,11 @@ describe('DoublyLinkedList', () => {
 			expect(listOfThreeItems.remove(15)).toBe(undefined);
 		});
 
-		test(`should return the removed node if index is found in the list`, () => {
+		test(`should return the removed node value if index is found in the list`, () => {
 			let secondNode = listOfThreeItems.head.next;
 			let thirdNode = listOfThreeItems.head.next.next;
-			expect(listOfThreeItems.remove(1)).toBe(secondNode);
-			expect(listOfThreeItems.remove(1)).toBe(thirdNode);
+			expect(listOfThreeItems.remove(1)).toBe(secondNode.val);
+			expect(listOfThreeItems.remove(1)).toBe(thirdNode.val);
 		});
 
 		test(`should decrement the length by 1`, () => {
@@ -350,22 +307,6 @@ describe('DoublyLinkedList', () => {
 			listOfThreeItems.remove(0);
 
 			expect(listOfThreeItems.length).toBe(0);
-		});
-
-		test(`should keep next pointers in the right order`, () => {
-			listOfThreeItems.remove(1);
-
-			expect(listOfThreeItems.head.val).toBe(10);
-			expect(listOfThreeItems.head.next.val).toBe(30);
-			expect(listOfThreeItems.head.next.next).toBe(null);
-		});
-
-		test(`should keep prev pointers in the right order`, () => {
-			listOfThreeItems.remove(1);
-
-			expect(listOfThreeItems.tail.val).toBe(30);
-			expect(listOfThreeItems.tail.prev.val).toBe(10);
-			expect(listOfThreeItems.tail.prev.prev).toBe(null);
 		});
 	});
 });

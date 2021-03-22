@@ -1,14 +1,17 @@
 /**
- * Singly Linked List
+ * Doubly Linked List
  *
  * Pros:
- * Fast insertion and removal
+ * - Fast insertion and removal
+ * - Better than Singly Linked List for finding nodes
  *
  * Cons:
- * No built in index
+ * - No built in index
+ * - Extra pointer takes up more memory
  *
  * Usecase:
- * Insertion and deletion at the beginning are frequently required
+ * - Insertion and deletion at the beginning are frequently required
+ * - Searching in both directions are frequently required
  *
  * Big O:
  * Insertion:  O(1) - (O(N) including searching operations)
@@ -21,10 +24,11 @@ class Node {
 	constructor(val) {
 		this.val = val;
 		this.next = null;
+		this.prev = null;
 	}
 }
 
-class SinglyLinkedList {
+class DoublyLinkedList {
 	constructor() {
 		this.head = null;
 		this.tail = null;
@@ -38,49 +42,48 @@ class SinglyLinkedList {
 			this.tail = newNode;
 		} else {
 			this.tail.next = newNode;
+			newNode.prev = this.tail;
 			this.tail = newNode;
 		}
 
 		this.length++;
-
 		return this;
 	}
 	pop() {
 		if (!this.head) return undefined;
 
-		let current = this.head;
-		let newTail = current;
+		const poppedNode = this.tail;
 
-		while (current.next) {
-			newTail = current;
-			current = current.next;
-		}
-
-		this.tail = newTail;
-		this.tail.next = null;
-		this.length--;
-
-		if (this.length === 0) {
+		if (this.length === 1) {
 			this.head = null;
 			this.tail = null;
+		} else {
+			this.tail = this.tail.prev;
+			this.tail.next = null;
+			poppedNode.prev = null;
 		}
 
-		return current;
+		this.length--;
+
+		return poppedNode.val;
 	}
 	shift() {
 		if (!this.head) return undefined;
 
 		let oldHead = this.head;
-		this.head = oldHead.next;
-		this.length--;
 
-		if (this.length === 0) {
+		if (this.length === 1) {
+			this.head = null;
 			this.tail = null;
+		} else {
+			this.head = oldHead.next;
+			this.head.prev = null;
+			oldHead.next = null;
 		}
 
-		oldHead.next = null;
+		this.length--;
 
-		return oldHead;
+		return oldHead.val;
 	}
 	unshift(val) {
 		const newNode = new Node(val);
@@ -89,6 +92,7 @@ class SinglyLinkedList {
 			this.head = newNode;
 			this.tail = newNode;
 		} else {
+			this.head.prev = newNode;
 			newNode.next = this.head;
 			this.head = newNode;
 		}
@@ -96,15 +100,30 @@ class SinglyLinkedList {
 		this.length++;
 		return this;
 	}
+
 	get(index) {
 		if (index < 0 || index >= this.length) return null;
 
-		let currentNode = this.head;
-		let currentPosition = 0;
+		let currentNode;
+		let currentPosition;
+		let middelIndex = Math.floor(this.length / 2);
 
-		while (currentPosition < index) {
-			currentNode = currentNode.next;
-			currentPosition++;
+		if (middelIndex >= index) {
+			currentNode = this.head;
+			currentPosition = 0;
+
+			while (currentPosition < index) {
+				currentNode = currentNode.next;
+				currentPosition++;
+			}
+		} else {
+			currentNode = this.tail;
+			currentPosition = this.length - 1;
+
+			while (currentPosition > index) {
+				currentNode = currentNode.prev;
+				currentPosition--;
+			}
 		}
 
 		return currentNode;
@@ -127,11 +146,14 @@ class SinglyLinkedList {
 			this.unshift(val);
 		} else {
 			const newNode = new Node(val);
-			let prevNode = this.get(index - 1);
-			let temp = prevNode.next;
+			const nextNode = this.get(index);
+			const prevNode = nextNode.prev;
 
-			newNode.next = temp;
+			nextNode.prev = newNode;
+			newNode.next = nextNode;
+
 			prevNode.next = newNode;
+			newNode.prev = prevNode;
 
 			this.length++;
 		}
@@ -143,42 +165,20 @@ class SinglyLinkedList {
 		if (index === 0) return this.shift();
 		if (index === this.length - 1) return this.pop();
 
-		let prevNode = this.get(index - 1);
-		let nodeToRemove = prevNode.next;
-		prevNode.next = nodeToRemove.next;
+		const nodeToRemove = this.get(index);
+		const prevNode = nodeToRemove.prev;
+		const nextNode = nodeToRemove.next;
 
+		prevNode.next = nextNode;
+		nextNode.prev = prevNode;
+
+		nodeToRemove.prev = null;
 		nodeToRemove.next = null;
 
 		this.length--;
 
-		return nodeToRemove;
-	}
-	reverse() {
-		let node = this.head;
-		this.head = this.tail;
-		this.tail = node;
-
-		let prev = null;
-		let next;
-
-		for (let i = 0; i < this.length; i++) {
-			next = node.next;
-			node.next = prev;
-			prev = node;
-			node = next;
-		}
-	}
-	print() {
-		const array = [];
-		let current = this.head;
-
-		while (current) {
-			array.push(current.val);
-			current = current.next;
-		}
-
-		console.log(array);
+		return nodeToRemove.val;
 	}
 }
 
-exports.SinglyLinkedList = SinglyLinkedList;
+exports.DoublyLinkedList = DoublyLinkedList;
