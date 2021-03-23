@@ -14,10 +14,10 @@
  * - Searching in both directions are frequently required
  *
  * Big O:
- * Insertion:  O(1) - (O(N) including searching operations)
- * Removal:    O(1) - (O(N) including searching operations)
- * Searching:  O(N)
- * Access:     O(N)
+ * - Insertion:  O(1) - (O(n) including searching operations)
+ * - Removal:    O(1) - (O(n) including searching operations)
+ * - Searching:  O(n)
+ * - Access:     O(n)
  */
 
 class Node {

@@ -17,10 +17,10 @@
  * - Foundational for more complex data structures
  *
  * Big O:
- * Insertion:  O(1)
- * Removal:    O(1)
- * Searching:  O(N)
- * Access:     O(N)
+ * - Insertion:  O(1)
+ * - Removal:    O(1)
+ * - Searching:  O(n)
+ * - Access:     O(n)
  *
  */
 
