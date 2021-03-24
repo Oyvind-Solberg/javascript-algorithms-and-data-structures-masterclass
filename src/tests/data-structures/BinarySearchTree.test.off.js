@@ -14,8 +14,16 @@ describe('BinarySearchTree', () => {
 
 	beforeEach(() => {
 		BST = new BinarySearchTree();
-
 		BSTOfSevenItems = new BinarySearchTree();
+
+		// BSTOfSevenItems:
+		//
+		//        40
+		//       /  \
+		//     20    60
+		//    / \    / \
+		//   10 30  50 70
+
 		BSTOfSevenItems.insert(40);
 
 		BSTOfSevenItems.insert(20);
@@ -83,6 +91,66 @@ describe('BinarySearchTree', () => {
 			expect(BSTOfSevenItems.find(-20)).toBe(undefined);
 			expect(BSTOfSevenItems.find(30.75)).toBe(undefined);
 			expect(BSTOfSevenItems.find(75)).toBe(undefined);
+		});
+	});
+
+	// BREADTH FIRST SEARCH
+	describe('BFSearch()', () => {
+		test('should return an array with all the values sorted by breadth', () => {
+			expect(BSTOfSevenItems.BFSearch()).toStrictEqual([
+				40,
+				20,
+				60,
+				10,
+				30,
+				50,
+				70,
+			]);
+		});
+	});
+
+	// TRAVERSAL PRE ORDER
+	describe('traversalPreOrder()', () => {
+		test('should return an array with all the values sorted pre order', () => {
+			expect(BSTOfSevenItems.traversalPreOrder()).toStrictEqual([
+				40,
+				20,
+				10,
+				30,
+				60,
+				50,
+				70,
+			]);
+		});
+	});
+
+	// TRAVERSAL POST ORDER
+	describe('traversalPostOrder()', () => {
+		test('should return an array with all the values sorted post order', () => {
+			expect(BSTOfSevenItems.traversalPostOrder()).toStrictEqual([
+				10,
+				30,
+				20,
+				50,
+				70,
+				60,
+				40,
+			]);
+		});
+	});
+
+	// TRAVERSAL IN ORDER
+	describe('traversalInOrder()', () => {
+		test('should return an array with all the values sorted in order', () => {
+			expect(BSTOfSevenItems.traversalInOrder()).toStrictEqual([
+				10,
+				20,
+				30,
+				40,
+				50,
+				60,
+				70,
+			]);
 		});
 	});
 });

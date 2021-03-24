@@ -1,3 +1,5 @@
+const { Queue } = require('./Queue');
+
 /**
  * BinarySearchTree
  *
@@ -117,6 +119,70 @@ class BinarySearchTree {
 		} else {
 			return currentNode;
 		}
+	}
+	BFSearch() {
+		const queue = new Queue();
+		const data = [];
+		let currentNode;
+
+		queue.enqueue(this.root);
+
+		while (queue.size > 0) {
+			currentNode = queue.dequeue();
+			data.push(currentNode.value);
+
+			if (currentNode.left) queue.enqueue(currentNode.left);
+			if (currentNode.right) queue.enqueue(currentNode.right);
+		}
+
+		return data;
+	}
+	traversalPreOrder() {
+		const data = [];
+		let currentNode = this.root;
+
+		function traversNode(node) {
+			data.push(node.value);
+
+			if (node.left) traversNode(node.left);
+			if (node.right) traversNode(node.right);
+		}
+
+		traversNode(currentNode);
+
+		return data;
+	}
+	traversalPostOrder() {
+		const data = [];
+		let currentNode = this.root;
+
+		function traversNode(node) {
+			if (node.left) traversNode(node.left);
+			if (node.right) traversNode(node.right);
+
+			data.push(node.value);
+		}
+
+		traversNode(currentNode);
+
+		return data;
+	}
+
+	traversalInOrder() {
+		const data = [];
+		let currentNode = this.root;
+
+		function traversNode(node) {
+			if (node.left) traversNode(node.left);
+
+			data.push(node.value);
+
+			if (node.right) traversNode(node.right);
+		}
+
+		traversNode(currentNode);
+
+		return data;
 	}
 }
 
