@@ -1,19 +1,14 @@
 /**
- * MaxHeap
+ * PriorityQueue
  *
  * Description:
- * Similar to binary search trees, but orderd parent/child not left/right
- * Parent nodes are always larger than child nodes
- * Stored as an array:
- * - For any index (n) of an array...
- *    The left child is stored at 2n + 1
- *    The right child is stored at 2n + 2
- * - For any child node at index (n)..
- *    Its paren is at index (n - 1) / 2 (rounded down)
+ *
  *
  * Terminology:
  *
+ *
  * Pros:
+ *
  *
  * Cons:
  *
@@ -22,18 +17,31 @@
  *
  *
  * Big O:
- *              Average   Worst case
- * - Insertion: O(log n)
- * - Removal:   O(log n)
- * - Search:    O(n)
+ *            Average   Worst case
+ *
+ *
  */
 
-class MaxHeap {
-	constructor(values = []) {
-		this.values = values;
+class Node {
+	constructor(value, priority) {
+		this.value;
+		this.priority;
 	}
-	insert(element) {
-		this.values.push(element);
+}
+
+class PriorityQueue {
+	constructor(...items) {
+		this.values = [];
+
+		if (items.length > 0) {
+			items.forEach((item) => {
+				this.values.push(new Node(item.value, item.priority));
+			});
+		}
+	}
+	enqueue(value, priority) {
+		let newNode = new Node(value, priority);
+		this.values.push(newNode);
 
 		if (this.values.length === 1) return this;
 
@@ -49,7 +57,7 @@ class MaxHeap {
 			let parentIndex = Math.floor((currentIndex - 1) / 2);
 			let parent = this.values[parentIndex];
 
-			if (element <= parent) break;
+			if (element.priority >= parent.priority) break;
 
 			this.values[parentIndex] = element;
 			this.values[currentIndex] = parent;
@@ -57,8 +65,8 @@ class MaxHeap {
 			currentIndex = parentIndex;
 		}
 	}
-	extractMax() {
-		let oldMax = this.values[0];
+	dequeue() {
+		let oldMin = this.values[0];
 		let endValue = this.values.pop();
 
 		if (this.values.length > 0) {
@@ -66,7 +74,7 @@ class MaxHeap {
 			this.sinkDown();
 		}
 
-		return oldMax;
+		return oldMin;
 	}
 	sinkDown() {
 		let currentIndex = 0;
@@ -81,7 +89,7 @@ class MaxHeap {
 
 			if (leftChildIndex < length) {
 				leftChild = this.values[leftChildIndex];
-				if (leftChild > element) {
+				if (leftChild.priority < element.priority) {
 					swap = leftChildIndex;
 				}
 			}
@@ -89,8 +97,8 @@ class MaxHeap {
 			if (rightChildIndex < length) {
 				rightChild = this.values[rightChildIndex];
 				if (
-					(swap === null && rightChild > element) ||
-					(swap !== null && rightChild > leftChild)
+					(swap === null && rightChild.priority < element.priority) ||
+					(swap !== null && rightChild.priority < leftChild.priority)
 				) {
 					swap = rightChildIndex;
 				}
@@ -106,24 +114,4 @@ class MaxHeap {
 	}
 }
 
-exports.MaxHeap = MaxHeap;
-
-const maxHeap15Items = new MaxHeap([
-	150,
-	140,
-	130,
-	120,
-	90,
-	110,
-	100,
-	80,
-	50,
-	40,
-	20,
-	70,
-	30,
-	10,
-	60,
-]);
-
-maxHeap15Items.extractMax();
+exports.PriorityQueue = PriorityQueue;
