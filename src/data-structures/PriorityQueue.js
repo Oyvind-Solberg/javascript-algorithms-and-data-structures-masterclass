@@ -24,8 +24,8 @@
 
 class Node {
 	constructor(value, priority) {
-		this.value;
-		this.priority;
+		this.value = value;
+		this.priority = priority;
 	}
 }
 
